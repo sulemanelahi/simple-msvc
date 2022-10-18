@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "aws-lambda": "^1.0.6",
+    "aws-sdk": "^2.437.0",
+    "dynamoose": "^2.3.0",
+    "logger": "0.0.1",
+    "moment": "^2.29.1",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^13.13.41"
+  },
+  "scripts": {
+    "build": "tsc"
+  }
+}
