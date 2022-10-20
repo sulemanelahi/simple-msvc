@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es2017",                       
     "module": "commonjs",                     
-    "outDir": "./dist",                    
+    "outDir": "./lib",                    
     "strict": true,                          
     "noImplicitAny": true,                
     "baseUrl": "./dependencies/nodejs/node_modules",                          
