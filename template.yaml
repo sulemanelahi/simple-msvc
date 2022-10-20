@@ -13,14 +13,14 @@ Globals:
       - !Ref NPMLayer
 
 Resources:
-  createProductFunction:
+  createProduct:
+    Type: AWS::Serverless::Function
     DependsOn:
       - MSVCCatalogTable
-    Type: AWS::Serverless::Function
     Properties:
-      Handler: handlers/organization-product-create.handler
-      Description: A simple example includes a HTTP get method to get all items from a DynamoDB table.
-      CodeUri: ./dist
+      Handler: handlers/organization/product/create.handler
+      Description: A simple example includes a HTTP POST method to get all an item into DynamoDB table.
+      CodeUri: ./lib
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref MSVCCatalogTable
@@ -29,7 +29,7 @@ Resources:
           Type: Api
           Properties:
             Path: /organization/{organizationId}/catalog
-            Method: post
+            Method: POST
 
   NPMLayer:
     Type: AWS::Serverless::LayerVersion
@@ -47,20 +47,20 @@ Resources:
     Properties:
       BillingMode: PAY_PER_REQUEST
       GlobalSecondaryIndexes:
-        - IndexName: 'organizationIdIndex'
+        - IndexName: "organizationIdIndex"
           KeySchema:
-            - AttributeName: 'organizationId'
+            - AttributeName: "organizationId"
               KeyType: HASH
-            - AttributeName: 'plu'
+            - AttributeName: "plu"
               KeyType: RANGE
           Projection:
             ProjectionType: ALL
           # ProvisionedThroughput:
           #   ReadCapacityUnits: 2
           #   WriteCapacityUnits: 2
-        - IndexName: 'catalogIdIndex'
+        - IndexName: "catalogIdIndex"
           KeySchema:
-            - AttributeName: 'catalogId'
+            - AttributeName: "catalogId"
               KeyType: HASH
           Projection:
             ProjectionType: ALL
@@ -68,18 +68,18 @@ Resources:
           #   ReadCapacityUnits: 2
           #   WriteCapacityUnits: 2
       AttributeDefinitions:
-        - AttributeName: 'organizationId'
-          AttributeType: 'S'
-        - AttributeName: 'catalogId'
-          AttributeType: 'S'
-        - AttributeName: 'plu'
-          AttributeType: 'S'
-        - AttributeName: 'data'
-          AttributeType: 'S'
+        - AttributeName: "organizationId"
+          AttributeType: "S"
+        - AttributeName: "catalogId"
+          AttributeType: "S"
+        - AttributeName: "plu"
+          AttributeType: "S"
+        - AttributeName: "data"
+          AttributeType: "S"
       KeySchema:
-        - AttributeName: 'organizationId'
+        - AttributeName: "organizationId"
           KeyType: HASH
-        - AttributeName: 'data'
+        - AttributeName: "data"
           KeyType: RANGE
       # ProvisionedThroughput:
       #   ReadCapacityUnits: 2
@@ -91,11 +91,11 @@ Outputs:
   # Find out more about other implicit resources you can reference within SAM
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   HelloWorldApi:
-    Description: 'API Gateway endpoint URL for Prod stage for Hello World function'
-    Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/'
+    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
   HelloWorldFunction:
-    Description: 'Hello World Lambda Function ARN'
+    Description: "Hello World Lambda Function ARN"
     Value: !GetAtt HelloWorldFunction.Arn
   HelloWorldFunctionIamRole:
-    Description: 'Implicit IAM Role created for Hello World function'
+    Description: "Implicit IAM Role created for Hello World function"
     Value: !GetAtt HelloWorldFunctionRole.Arn
