@@ -1,6 +1,6 @@
 import * as dynamoose from 'dynamoose';
 
-const schema = {
+const schema: any = {
   organizationId: {
     type: String,
     hashKey: true,
@@ -62,6 +62,6 @@ const schema = {
 };
 
 export default new dynamoose.Schema(schema, {
-  saveUnkown: ['metadata.**'],
+  saveUnknown: ['metadata.**'],
   timestamps: true,
 });

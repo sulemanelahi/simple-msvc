@@ -1,30 +1,36 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from '../../../../dependencies/nodejs/node_modules/@types/aws-lambda';
 import Controller from '../../../controllers/organization/products/create';
-import { environment } from '../../../environments';
 
-export const handler = async ({ pathParameters, body }: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  const response: APIGatewayProxyResult = {
-    statusCode: 200,
-    data: null,
-    isBase64Encoded: false,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
-      'Access-Control-Allow-Credentials': true,
-      'Content-Type': 'application/json',
-    },
+export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+  let response: APIGatewayProxyResult;
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+    'Access-Control-Allow-Credentials': true,
+    'Content-Type': 'application/json',
   };
+
   try {
-    const data = await Controller(pathParameters?.organizationId, body);
-    response.body = JSON.stringify({ data });
-  } catch (error) {
-    response.statusCode = 400;
-    response.data = {
-      name: error?.name,
-      message: error?.message,
-      stack: error?.stack,
+    const data = await Controller(event.pathParameters, event?.body);
+    response = {
+      statusCode: 200,
+      body: JSON.stringify(data),
+      isBase64Encoded: false,
+      headers,
     };
+  } catch (error) {
+    const data = {
+      name: (error as Error)?.name,
+      message: (error as Error)?.message,
+      stack: (error as Error)?.stack,
+    };
+    response = {
+      statusCode: 500,
+      body: JSON.stringify(data),
+      isBase64Encoded: false,
+      headers,
+    }
   }
 
-  return response;
+ return response
 };
