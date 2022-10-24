@@ -19,7 +19,7 @@ const schema: any = {
     type: String,
     required: true,
     index: {
-      name: 'çatalogIdIndex',
+      name: 'catalogIdIndex',
       throughput: {
         read: 5,
         write: 10,

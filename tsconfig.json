@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     "target": "es2017",                       
+    "strict": true,                          
     "module": "commonjs",                     
     "outDir": "./lib",                    
-    "strict": true,                          
     "noImplicitAny": true,                
     "baseUrl": "./dependencies/nodejs/node_modules",                          
     "typeRoots": ["dependencies/nodejs/node_modules/@types"],     
