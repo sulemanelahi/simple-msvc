@@ -42,6 +42,25 @@ Resources:
             Method: POST
             RestApiId: !Ref ApiGatewayApi
 
+  getProducts:
+    DependsOn:
+      - MSVCCatalogTable
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: handlers/organization/product/get.handler
+      Description: A simple example includes a HTTP GET method to get all an item from DynamoDB table.
+      CodeUri: ./lib
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref MSVCCatalogTable
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /organization/{organizationId}/catalog
+            Method: GET
+            RestApiId: !Ref ApiGatewayApi
+
   ApiGatewayApi:
     Type: AWS::Serverless::Api
     Properties:

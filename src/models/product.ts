@@ -112,11 +112,16 @@ export default class ProductModel {
         return cleanParams;
     };
 
-    _loadParams = (parameters: any) => this.Model = new this.DynaModel(parameters);
+    _loadParams = (parameters: any) => (this.Model = new this.DynaModel(parameters));
 
     getById = () => {};
 
-    getByOrganization = () => {};
+    getByOrganization = async (organizationId: string) =>
+        await this.DynaModel.query('organizationId')
+            .eq(organizationId)
+            .attributes(this._viewableAttributes())
+            .sort('descending')
+            .exec();
 
     getByCategories = () => {};
 
@@ -138,11 +143,12 @@ export default class ProductModel {
 
     save = async (organizationId: string, params: any) => {
         let cleanParams = this._cleanParams(params, 'create');
+        
         this._loadParams(cleanParams);
         this.Model.organizationId = organizationId;
         this.Model.catalogId = uuid();
         this.Model.data = `organization#${this.Model.organizationId}#catalog#${this.Model.catalogId}`;
-        
+
         const model = await this.Model.save({
             overwrite: true,
         });

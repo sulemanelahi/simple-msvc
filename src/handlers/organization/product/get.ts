@@ -2,7 +2,7 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import Controller from '../../../controllers/organization/products/get';
 
-export const handler = async (Event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   let response: APIGatewayProxyResult;
   const headers = {
     'Access-Control-Allow-Origin': '*',
@@ -12,12 +12,11 @@ export const handler = async (Event: APIGatewayProxyEvent): Promise<APIGatewayPr
   };
 
   try {
-    const event = JSON.parse(Event.body!);
-    const data = await Controller(event?.pathParameters);
+    const data = await Controller(event?.pathParameters?.organizationId);
 
     response = {
       statusCode: 200,
-      body: JSON.stringify(data),
+      body: data,
       isBase64Encoded: false,
       headers,
     };
